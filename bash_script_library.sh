@@ -62,10 +62,57 @@ function is_user_exits()
     grep -q "^${u}" $PASSWD_FILE && return $TRUE || return $FALSE
 }
 
+##################################################################
+# Purpose: Wait process (service) to stop itself in a number of seconds.
+# 			Then kill it if it is still running
+# Arguments: None
+# Return: None
+##################################################################
+function waitForProcessToDie()
+{
+	PROC_NAME=tomcat
+	PROC_HOME=/soft/tomcat
 
+	TIMELIMIT=60
+	SLEEPTIME=1
 
+	PROCESSES=`ps auxwww | grep 'java' | grep $PROC_NAME | grep $PROC_HOME | grep -v 'grep'`
+	while [ ! -z "$PROCESSES" ] && [ $SECONDS -lt $TIMELIMIT ] && [ $TIMELIMIT -ne 0 ]; do
+		echo -n "."
+		sleep $SLEEPTIME
+		PROCESSES=`ps auxwww | grep 'java' | grep $PROC_HOME | grep -v 'grep'`
+	done
+	echo ""
+	if [ ! -z "$PROCESSES" ]; then
+		PROCESS_ID=`echo $PROCESSES | awk '{ print $2 }'`
+		echo "Killing process: $PROCESS_ID"
+		kill -9 $PROCESS_ID
+	fi
+}
 
+##################################################################
+# Purpose: Print the usage of the program
+# Arguments: None
+# Return: None
+##################################################################
 
+function usage() {
+	echo "Usage: $0 Arguments"
+}
+
+#
+# returns lowercase string
+#
+function tolower {
+    echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+#
+# returns uppercase string
+#
+function toupper {
+    echo "$1" | tr '[:lower:]' '[:upper:]'
+}
 
 
 
