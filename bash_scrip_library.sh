@@ -1,5 +1,5 @@
 #!/bin/bash
-# REF LINK: 
+# REF LINK: http://bash.cyberciti.biz/guide/Shell_functions_library
 # You can store all your function in a function files called functions library.
 # You can load all function into the current script or the command prompt.
 # The syntax is as follows to load all functions:
